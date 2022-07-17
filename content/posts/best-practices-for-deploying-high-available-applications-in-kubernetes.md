@@ -1,7 +1,6 @@
 ---
 title: "Best Practices for Deploying High Available Applications in Kubernetes"
 date: 2022-07-17T16:23:44+03:00
-type: "post"
 showTableOfContents: true
 tags: ["Kubernetes"]
 ---
