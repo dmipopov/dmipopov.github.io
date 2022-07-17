@@ -1,1 +1,3 @@
 User-agent: *
+Allow: /
+Sitemap: http://dmipopov.github.io/sitemap.xml
