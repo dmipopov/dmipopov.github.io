@@ -1,9 +1,6 @@
 ---
 title: "Hide Kubernetes secrets with helm-secrets, sops and vals"
 date: 2022-03-31T22:15:12+03:00
-type: "post"
-showTableOfContents: true
-image: "/img/preview_kubernetes_helm_secrets.png"
 tags: ["Kubernetes", "Helm"]
 ---
 
