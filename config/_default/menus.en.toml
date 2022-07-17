@@ -24,7 +24,7 @@
 
 [[main]]
   name = "CV"
-  pageRef = "cv"
+  url = "/popov_devops.pdf"
   weight = 30
 
 
