@@ -46,6 +46,7 @@ replicas. To do this, **recommend the scheduler not to run multiple Pods of the 
               topologyKey: kubernetes.io/hostname
 ```
 
+
 Use `preferredDuringScheduling` instead of `requiredDuringScheduling`, which may make it impossible to launch new Pods
 if there are fewer available nodes than the new Pods require. However, `requiredDuringScheduling` can be useful when the
 number of nodes and replicas of the application is precisely known and you need to be sure that two Pods won't be run on
