@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #ee81c2;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>Best Practices for Deploying High Available Applications in Kubernetes</title>
+    <meta name="description" content="Hi, I am a 4th year cybersec student at HSE and DevOps engineer. This blog is for fun, do not take it too seriously.">
+    <meta name="keywords" content='blog, dmipopov, devops, golang, Дмитрий, Попов, Kubernetes'>
+
+    <meta property="og:url" content="http://dmipopov.github.io/posts/best-practices-for-deploying-high-available-applications-in-kubernetes/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Best Practices for Deploying High Available Applications in Kubernetes">
+    <meta property="og:description" content="Hi, I am a 4th year cybersec student at HSE and DevOps engineer. This blog is for fun, do not take it too seriously.">
+    <meta property="og:image" content="/face.jpeg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Best Practices for Deploying High Available Applications in Kubernetes">
+    <meta name="twitter:description" content="Hi, I am a 4th year cybersec student at HSE and DevOps engineer. This blog is for fun, do not take it too seriously.">
+    <meta property="twitter:domain" content="http://dmipopov.github.io/posts/best-practices-for-deploying-high-available-applications-in-kubernetes/">
+    <meta property="twitter:url" content="http://dmipopov.github.io/posts/best-practices-for-deploying-high-available-applications-in-kubernetes/">
+    <meta name="twitter:image" content="/face.jpeg">
+
+    
+    <link rel="canonical" href="http://dmipopov.github.io/posts/best-practices-for-deploying-high-available-applications-in-kubernetes/" />
+
+    <link rel="stylesheet" type="text/css" href="http://dmipopov.github.io//css/normalize.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" type="text/css" href="http://dmipopov.github.io//css/main.css">
+    <link disabled id="dark-theme" rel="stylesheet" href="http://dmipopov.github.io//css/dark.css">
+
+    <script src="http://dmipopov.github.io//js/svg-injector.min.js"></script>
+    <script src="http://dmipopov.github.io//js/feather-icons.min.js"></script>
+    <script src="http://dmipopov.github.io//js/main.js"></script>
+
+    
+    
+    <meta name="google-site-verification" content="paFPDfNajAuHa6zUeXNw9bLL7S8pder-EknsuBxDoBM" />
+    
+</head>
+<body>
+        <script type="text/javascript">
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+        <div class="avatar">
+            <a href="http://dmipopov.github.io/">
+                <img src="http://dmipopov.github.io//face.jpeg" alt="avatar" />
+            </a>
+        </div>
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="http://dmipopov.github.io/">Dmitry Popov</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="http://dmipopov.github.io/posts/"> Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://dmipopov.github.io/tags/"> Tags </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://dmipopov.github.io/files/popov_devops.pdf"> CV </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com/dmipopov"><span data-feather='github'></span>  </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://www.linkedin.com/in/dmipopov/"><span data-feather='linkedin'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <a>
+                    <span id="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <a>
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="http://dmipopov.github.io/posts/"> Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://dmipopov.github.io/tags/"> Tags </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://dmipopov.github.io/files/popov_devops.pdf"> CV </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com/dmipopov"><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://www.linkedin.com/in/dmipopov/"><span data-feather='linkedin'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <a>
+                        <span id="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>Best Practices for Deploying High Available Applications in Kubernetes</h1>
+        <small role="doc-subtitle"></small>
+        <p class="post-date">
+            July 17, 2022
+        </p>
+
+        <ul class="post-tags">
+        
+            <li class="post-tag"><a href="http://dmipopov.github.io/tags/kubernetes">Kubernetes</a></li>
+        
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <p>
+            <p>It&rsquo;s not difficult to deploy an application in Kubernetes with minimal working configuration.
+But when you want to provide your application with maximum availability and reliability, you will inevitably encounter a
+considerable number of pitfalls. In this article, I tried to systematize and describe the most important rules for
+deploying highly available applications in Kubernetes.</p>
+<p>Functionality that is not available in Kubernetes &ldquo;out of the box&rdquo; will hardly be affected here. Also, I won&rsquo;t be tied
+to specific CD solutions and will omit the issues of templating/generating Kubernetes manifests.</p>
+<h2 id="1-number-of-replicas">1. Number of replicas</h2>
+<p>It&rsquo;s hard to talk about any availability if the application doesn&rsquo;t work in at least 2 replicas. Why are there problems
+when launching an application in 1 replica? Many Kubernetes objects (Node, Pod, ReplicaSet, etc.) can be automatically
+deleted/recreated under certain conditions, so Kubernetes cluster and the applications running in it should be ready for
+such situations.</p>
+<p>For example, when autoscaling nodes down, some nodes along with the Pods running on them will be deleted. If your
+application is running in a single instance on the node being deleted at this time, application will be unavaileble for
+some time. In general, when working in the same replica, any abnormal shutdown of the application will mean a downtime.
+Thus, <strong>the application must be running in at least 2 replicas</strong>.</p>
+<p><em>The recommendations are relevant if HorizontalPodAutoscaler is not used. The best option for applications that will
+have more than a few replicas is to configure HorizontalPodAutoscaler and forget about specifying the number of replicas
+manually.</em></p>
+<h2 id="2-uniform-distribution-of-replicas-by-nodes">2. Uniform distribution of replicas by nodes</h2>
+<p>It&rsquo;s very important to distribute application Pods to different nodes if the application is running in multiple
+replicas. To do this, <strong>recommend the scheduler not to run multiple Pods of the same Deployment on the same node</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>      <span style="color:#ff79c6">affinity</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">podAntiAffinity</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">preferredDuringSchedulingIgnoredDuringExecution</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">podAffinityTerm</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">labelSelector</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">app</span>: testapp
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">topologyKey</span>: kubernetes.io/hostname
+</span></span></code></pre></div><p>Use <code>preferredDuringScheduling</code> instead of <code>requiredDuringScheduling</code>, which may make it impossible to launch new Pods
+if there are fewer available nodes than the new Pods require. However, <code>requiredDuringScheduling</code> can be useful when the
+number of nodes and replicas of the application is precisely known and you need to be sure that two Pods won&rsquo;t be run on
+the same node.</p>
+<h2 id="3-priorityclass">3. PriorityClass</h2>
+<p><code>priorityClassName</code> affects which Pods will be scheduled in the first place, as well as which Pods can be evicted by the
+scheduler if there&rsquo;s no space left for new Pods on the nodes.</p>
+<p>You&rsquo;ll need to create several resources of the
+<a href="https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass">PriorityClass</a> type and
+associate them with the Pods via <code>priorityClassName</code>. A set of PriorityClass may look something like this:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th style="text-align:center">Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cluster</strong></td>
+<td style="text-align:center">20000</td>
+<td>Critical components for functioning of the cluster, such as kube-api server</td>
+</tr>
+<tr>
+<td><strong>Daemonsets</strong></td>
+<td style="text-align:center">10000</td>
+<td>Usually we want DaemonSet&rsquo;s Pods not to be evicted by regular applications</td>
+</tr>
+<tr>
+<td><strong>Production-high</strong></td>
+<td style="text-align:center">9000</td>
+<td>Stateful apps</td>
+</tr>
+<tr>
+<td><strong>Production-medium</strong></td>
+<td style="text-align:center">8000</td>
+<td>Stateless apps</td>
+</tr>
+<tr>
+<td><strong>Default</strong></td>
+<td style="text-align:center">7000</td>
+<td>Non-production apps</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-update-strategy">4. Update strategy</h2>
+<p>TODO</p>
+<h2 id="5-stopping-processes-in-containers">5. Stopping processes in containers</h2>
+<p>TODO</p>
+<h2 id="6-probes">6. Probes</h2>
+<p>TODO</p>
+<h3 id="61-liveness-probe">6.1 Liveness probe</h3>
+<p>TODO</p>
+<h3 id="62-readiness-probe">6.2 Readiness probe</h3>
+<p>TODO</p>
+<h3 id="63-startup-probe">6.3 Startup probe</h3>
+<p>TODO</p>
+
+        </p>
+    </div>
+</div>
+
+<aside class="post-toc">
+    <nav id="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-number-of-replicas">1. Number of replicas</a></li>
+    <li><a href="#2-uniform-distribution-of-replicas-by-nodes">2. Uniform distribution of replicas by nodes</a></li>
+    <li><a href="#3-priorityclass">3. PriorityClass</a></li>
+    <li><a href="#4-update-strategy">4. Update strategy</a></li>
+    <li><a href="#5-stopping-processes-in-containers">5. Stopping processes in containers</a></li>
+    <li><a href="#6-probes">6. Probes</a>
+      <ul>
+        <li><a href="#61-liveness-probe">6.1 Liveness probe</a></li>
+        <li><a href="#62-readiness-probe">6.2 Readiness probe</a></li>
+        <li><a href="#63-startup-probe">6.3 Startup probe</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </nav>
+</aside>
+
+
+
+    
+
+        </main><footer class="footer">
+    <span>&copy; 2022 Dmitry Popov</span>
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/526avijitgupta/gokarna">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>
