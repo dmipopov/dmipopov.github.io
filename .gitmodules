@@ -1,3 +1,4 @@
-[submodule "dmipopovblog/themes/gokarna"]
-	path = dmipopovblog/themes/gokarna
-	url = https://github.com/526avijitgupta/gokarna.git
+[submodule "dmipopovblog/themes/congo"]
+	path = dmipopovblog/themes/congo
+	url = https://github.com/jpanther/congo.git
+	branch = stable
